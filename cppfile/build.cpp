@@ -12,6 +12,17 @@ void toMorse (const char* text){
         }
     }
     w.fixHeader ();
+    w.closeFile ();
+}
+
+void fromMorse (const char* title){
+    Read r (title); // fichier audio à lire
+    std::ofstream f ("transcription.txt"); // fichier qui va contenir la transcription
+    
+    // corps
+
+    r.closeFile ();
+    f.close ();
 }
 
 bool ending (const char* title, const char* ext, const int ltitle, const int lext){
@@ -26,21 +37,19 @@ void recognise (const char* title){
     bool flag = true;
     for (; title [len] and flag; flag = len < 64, len++){}
     // on estime qu'un nom de document fait au plus 64 caractères
-    if (flag){
-        if (ending (title, ".wav", len, 4) or ending (title, ".wave", len, 5)){
-            fromMorse (title);
-            std::cout << "Le fichier résultat s'appelle transcription.txt" << std::endl;
-        }
-        if (ending (title, ".txt", len, 4)){
-            std::ifstream f (title);
-            f.seekg (0, f.end);
-            int fileLen = f.tellg ();
-            f.seekg (0, f.beg);
-            char* content = new char [fileLen];
-            f.read (content, fileLen);
-            toMorse (content);
-            std::cout << "Le fichier résultat s'appelle transcription.wav" << std::endl;
-        }
+    if (flag and (ending (title, ".wav", len, 4) or ending (title, ".wave", len, 5))){
+        fromMorse (title);
+        std::cout << "Le fichier résultat s'appelle transcription.txt" << std::endl;
+    }
+    else if (flag and ending (title, ".txt", len, 4)){
+        std::ifstream f (title);
+        f.seekg (0, f.end);
+        int fileLen = f.tellg ();
+        f.seekg (0, f.beg);
+        char* content = new char [fileLen];
+        f.read (content, fileLen);
+        toMorse (content);
+        std::cout << "Le fichier résultat s'appelle transcription.wav" << std::endl;
     }
     else{
         toMorse (title);
