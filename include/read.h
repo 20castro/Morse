@@ -4,6 +4,7 @@
 #define DEF_READ
 
 #include "wave.h"
+#include <cmath>
 
 class Read : public Wavfile{
 
@@ -11,11 +12,10 @@ class Read : public Wavfile{
         Read (const char*); // ouvre le fichier et extrait les données du header
 
     public:
-        int periode ();
-        int silence ();
-
-    public:
-        void setCur (int);
+        double* fourierMax (double, double, double);
+        // approxime une transformation de Fourier sur 0.05 s de son et renvoie son maximum et où il est atteint
+        bool harmonique ();
+        // à l'aide de Fourier, détremine si l'intensité du son correspond à celle d'un bruit ou pas
 
     private:
         std::ifstream file;

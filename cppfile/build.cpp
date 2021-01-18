@@ -4,7 +4,7 @@ void toMorse (const char* text){
     std::map <char, int> dict = buildMap ();
     Write w ("transcription.wav");
     for (int j = 0; text [j]; j++){
-        if (dict.find (text [j]) != dict.end ()){
+        if (dict.find (letterCast (text [j])) != dict.end ()){
             w.addLetter (dict[text[j]]);
         }
         else{

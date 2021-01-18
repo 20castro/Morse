@@ -6,7 +6,6 @@
 #include "wave.h"
 #include <cmath>
 
-static double tau = 6.283185307179586476925286766559;
 static double amax = 32760; // amplitude maximale
 
 int sine (double, double, int);

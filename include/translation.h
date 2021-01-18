@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-void letterCast (char&); // traduit les majuscules en minuscules si nécessaire
+const char letterCast (const char&); // traduit les majuscules en minuscules si nécessaire
 
 std::map <char, int> buildMap ();
 

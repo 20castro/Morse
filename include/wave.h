@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 
+static double tau = 6.283185307179586476925286766559;
+
 class Wavfile{
 
     public:

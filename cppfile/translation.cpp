@@ -1,7 +1,8 @@
 #include "translation.h"
 
-void letterCast (char& c){
-    if (64 < c < 91){ c += 32; }
+const char letterCast (const char& c){
+    if (64 < c < 91){ return c + 32; }
+    else{ return c; }
 }
 
 std::map <char, int> buildMap (){
