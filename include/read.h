@@ -5,6 +5,9 @@
 
 #include "wave.h"
 #include <cmath>
+#include <vector>
+
+double max (std::vector <double>);
 
 class Read : public Wavfile{
 
@@ -12,10 +15,11 @@ class Read : public Wavfile{
         Read (const char*); // ouvre le fichier et extrait les données du header
 
     public:
-        double* fourierMax (double, double, double);
-        // approxime une transformation de Fourier sur 0.05 s de son et renvoie son maximum et où il est atteint
+        double* fourierMax (double, double, double, bool);
+        // approxime une transformation de Fourier sur 0.1 s de son et renvoie son maximum et où il est atteint
         bool harmonique ();
         // à l'aide de Fourier, détremine si l'intensité du son correspond à celle d'un bruit ou pas
+        std::vector <double> fill ();
 
     private:
         std::ifstream file;
@@ -24,8 +28,6 @@ class Read : public Wavfile{
         int rate; // fréquence d'échantillonage en Hz
         int sample; // nombre de bits par échantillon
         int longueur; // taille du fichier
-
-        // int* sequence; // ici ou dans une fonction en dehors de la classe ?    
 };
 
 #endif

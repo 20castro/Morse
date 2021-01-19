@@ -17,11 +17,18 @@ void toMorse (const char* text){
 
 void fromMorse (const char* title){
     Read r (title); // fichier audio à lire
+    std::vector <double> sequence = r.fill ();
+    double unit = max (sequence)/3; // longueur d'un point
+    // dans la suite, ce qui nous intéresse sera alors uniquement le vecteur sequence (on peut supprimer r)
+    // dans sequence, le son est aux indices pairs et les silences aux indices impairs
+    r.closeFile (); // devrait pouvoir s'intégrer au delete
+    delete &r;
     std::ofstream f ("transcription.txt"); // fichier qui va contenir la transcription
     
-    // corps
+    /* corps (traitement de sequence, ie on construit l'arbre et on le parcourt jusqu'à tomber sur un silence
+    long : à ce moment, on ajoute la lettre correspondante à f avec << puis un espace ou jusqu'à tomber sur
+    la dernière case du vecteur : à ce moment, on ajoute juste la lettre) */
 
-    r.closeFile ();
     f.close ();
 }
 
