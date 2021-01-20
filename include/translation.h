@@ -4,11 +4,9 @@
 #include <map>
 #include <string>
 
-#include "tree.h"
-
 const char letterCast (const char&); // traduit les majuscules en minuscules si nécessaire
 
 std::map <char, int> buildMap ();
-Tree* buildTree ();
+const char* buildTree ();
 
 #endif

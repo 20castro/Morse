@@ -23,12 +23,27 @@ void fromMorse (const char* title){
     // dans sequence, le son est aux indices pairs et les silences aux indices impairs
     r.closeFile (); // devrait pouvoir s'intégrer au delete
     delete &r;
+    const char* graphe = buildTree (); // représente un arbre
+    int cur = 0;
     std::ofstream f ("transcription.txt"); // fichier qui va contenir la transcription
-    
-    /* corps (traitement de sequence, ie on construit l'arbre et on le parcourt jusqu'à tomber sur un silence
-    long : à ce moment, on ajoute la lettre correspondante à f avec << puis un espace ou jusqu'à tomber sur
-    la dernière case du vecteur : à ce moment, on ajoute juste la lettre) */
-
+    // Traitement de sequence
+    const int L = sequence.size (); 
+    for (int k = 0; k < L; k += 2){
+        if (sequence [k] > 1.5*unit and 2*cur < 62){
+            cur = 2*cur + 2; // on se déplace vers le fils droit
+        }
+        else if (sequence [k] > unit*0.5 and 2*cur < 63){
+            cur = 2*cur + 1; // on se déplace vers le fils gauche
+        }
+        if (k + 2 >= L){
+            f << graphe [cur];
+        }
+        else if (sequence [k + 1] > 1.5*unit){
+            f << graphe [cur];
+            f << ' ';
+            cur = 0;
+        }
+    }
     f.close ();
 }
 

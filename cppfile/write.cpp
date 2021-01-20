@@ -63,9 +63,11 @@ void Write::addLetter (int c){ // si c'est possible, l'argument est c = dict[let
     else{ longSilence (); }
 }
 
+/*
 void Write::setCur (int cur){
     file.seekp (cur);
 }
+*/
 
 void Write::fixHeader (){
     file.seekp (0, file.end);

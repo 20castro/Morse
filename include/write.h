@@ -26,7 +26,6 @@ class Write : public Wavfile{
         void addLetter (int); // destiné à recevoir les entiers du dictionnaire de translation
 
     public:
-        void setCur (int);
         void fixHeader (); // rentre la taille réelle du fichier dans le header
 
     private:
