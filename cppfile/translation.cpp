@@ -43,7 +43,7 @@ std::map <char, int> buildMap (){
     return dict;
 }
 
-Tree buildTree (){
+Tree* buildTree (){
     Tree null (0);
     Tree c0 ('0');
     Tree c1 ('1');
@@ -84,5 +84,5 @@ Tree buildTree (){
     Tree m (&g, &o, 'm');
     Tree e (&i, &a, 'e');
     Tree t (&n, &m, 't');
-    return Tree (&e, &t, 0);
+    return &Tree (&e, &t, 0);
 }

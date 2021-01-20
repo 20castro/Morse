@@ -9,6 +9,6 @@
 const char letterCast (const char&); // traduit les majuscules en minuscules si nécessaire
 
 std::map <char, int> buildMap ();
-Tree buildTree ();
+Tree* buildTree ();
 
 #endif
