@@ -42,3 +42,47 @@ std::map <char, int> buildMap (){
     }
     return dict;
 }
+
+Tree buildTree (){
+    Tree null (0);
+    Tree c0 ('0');
+    Tree c1 ('1');
+    Tree c2 ('2');
+    Tree c3 ('3');
+    Tree c4 ('4');
+    Tree c5 ('5');
+    Tree c6 ('6');
+    Tree c7 ('7');
+    Tree c8 ('8');
+    Tree c9 ('9');
+    Tree h (&c5, &c4, 'h');
+    Tree v (&null, &c3, 'v');
+    Tree f ('f');
+    Tree n1 (&null, &c2, 0);
+    Tree l ('l');
+    Tree p ('p');
+    Tree j (&null, &c1, 'j');
+    Tree b (&c6, &null, 'b');
+    Tree x ('x');
+    Tree c ('c');
+    Tree y ('y');
+    Tree z (&c7, &null, 'z');
+    Tree q ('q');
+    Tree n2 (&c8, &null, 0);
+    Tree n3 (&c9, &c0, 0);
+    Tree s (&h, &v, 's');
+    Tree u (&f, &n1, 'u');
+    Tree r (&l, &null, 'r');
+    Tree w (&p, &j, 'w');
+    Tree d (&b, &x, 'd');
+    Tree k (&c, &y, 'k');
+    Tree g (&z, &q, 'g');
+    Tree o (&n2, &n3, 'o');
+    Tree i (&s, &u, 'i');
+    Tree a (&r, &w, 'a');
+    Tree n (&d, &k, 'n');
+    Tree m (&g, &o, 'm');
+    Tree e (&i, &a, 'e');
+    Tree t (&n, &m, 't');
+    return Tree (&e, &t, 0);
+}
