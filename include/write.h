@@ -17,7 +17,6 @@ static double tau = 6.283185307179586476925286766559;
 static double amax = 32760; // amplitude maximale
 
 int sine (double, double, int);
-double freq (double, int);
 
 class Write{
 
@@ -43,7 +42,7 @@ class Write{
     private:
         std::ofstream& file;
         const int rate = 44100; // fréquence d'échantillonage en Hz
-        const double unit = 0.8; // unité de temps en secondes
+        const double unit = 0.7; // unité de temps en secondes
         const double fshort = 440; // fréquence des "ti" en Hz
 };
 

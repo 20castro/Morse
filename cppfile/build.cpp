@@ -6,7 +6,7 @@ void toMorse (const char* text){
     Write w (ofile);
     for (int j = 0; text [j]; j++){
         if (dict.find (letterCast (text [j])) != dict.end ()){
-            w.addLetter (dict[text[j]]);
+            w.addLetter (dict[letterCast (text [j])]);
         }
         else{
             // Si le caractère n'est pas dans le dictionnaire, on l'ignore
