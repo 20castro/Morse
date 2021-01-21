@@ -1,14 +1,15 @@
-#include "read.h"
+#include "../include/read.h"
 
 double max (std::vector <double> u){
-    double max = u [0];
-    for (std::vector <double>::iterator it; it != u.end (); it++){
-        if (*it > max){ max = *it; }
+    double maximum = u [0];
+    const int L = u.size ();
+    for (double x : u){
+        if (x > maximum){ maximum = x; }
     }
-    return max;
+    return maximum;
 }
 
-Read::Read (const char* nom) : file (nom, std::ios::binary){
+Read::Read (std::ifstream& file) : file (file){
     file.seekg (16);
     extra = pickBytes (4) - 16;
     file.seekg (22);
@@ -21,9 +22,24 @@ Read::Read (const char* nom) : file (nom, std::ios::binary){
     longueur = pickBytes (4);
 }
 
-double* Read::fourierMax (double inf, double sup, double pas, bool stayThere = false){
+Read::~Read (){
+    file.close ();
+}
+
+int Read::pickBytes (int size){ // en little-endian
+    int res = 0;
+    int pow = 1;
+    for (; size; size--, pow *= 256){
+        res += pow*file.get ();
+    }
+    return res;
+}
+
+std::vector <double> Read::fourierMax (double inf, double sup, double pas, bool stayThere = false){
     const int there = file.tellg ();
-    double max [2] = {inf, 0}; 
+    std::vector <double> maxi (2);
+    maxi [0] = inf;
+    maxi [1] = 0;
     double height, sinlevel, coslevel, i;
     for (double f = inf; f <= sup; f += pas){
         sinlevel = 0;
@@ -35,17 +51,17 @@ double* Read::fourierMax (double inf, double sup, double pas, bool stayThere = f
             coslevel += 20*i*cos (tau*f*step/rate)/rate;
         }
         height = sqrt (sinlevel*sinlevel + coslevel*coslevel);
-        if (height > max [1]){
-            max [0] = f;
-            max [1] = height;
+        if (height > maxi [1]){
+            maxi [0] = f;
+            maxi [1] = height;
         }
     }
     if (stayThere){ file.seekg (there); }
-    return max;
+    return maxi;
 }
 
 bool Read::harmonique (){
-    double* range = fourierMax (20, 2000, 1, true);
+    std::vector <double> range = fourierMax (20, 2000, 1, true);
     // premier passage imprécis
     int level = fourierMax (range [0] - 1, range [0] + 1, 0.01, false) [1];
     // deuxième passage plus étroit et précis

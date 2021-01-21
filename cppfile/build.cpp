@@ -1,8 +1,9 @@
-#include "build.h"
+#include "../include/build.h"
 
 void toMorse (const char* text){
     std::map <char, int> dict = buildMap ();
-    Write w ("transcription.wav");
+    std::ofstream ofile ("transcription.wav", std::ios::binary);
+    Write w (ofile);
     for (int j = 0; text [j]; j++){
         if (dict.find (letterCast (text [j])) != dict.end ()){
             w.addLetter (dict[text[j]]);
@@ -11,18 +12,17 @@ void toMorse (const char* text){
             // Si le caractère n'est pas dans le dictionnaire, on l'ignore
         }
     }
-    w.fixHeader ();
-    w.closeFile ();
+    // appel implicite du destructeur de Write qui complète le header et ferme le fichier
 }
 
 void fromMorse (const char* title){
-    Read r (title); // fichier audio à lire
+    std::ifstream ifile (title, std::ios::binary);
+    Read r (ifile); // fichier audio à lire
     std::vector <double> sequence = r.fill ();
     double unit = max (sequence)/3; // longueur d'un point
     // dans la suite, ce qui nous intéresse sera alors uniquement le vecteur sequence (on peut supprimer r)
     // dans sequence, le son est aux indices pairs et les silences aux indices impairs
-    r.closeFile (); // devrait pouvoir s'intégrer au delete
-    delete &r;
+    delete &r; // le fichier attribut de r est fermé par la destructeur
     const char* graphe = buildTree (); // représente un arbre
     int cur = 0;
     std::ofstream f ("transcription.txt"); // fichier qui va contenir la transcription
@@ -49,6 +49,7 @@ void fromMorse (const char* title){
 
 bool ending (const char* title, const char* ext, const int ltitle, const int lext){
     // les deux derniers arguments sont des tailles de chaînes de caractères (sans compter le caractère final)
+    if (ltitle < lext){ return false; }
     bool res = true;
     for (int k = 0; res and k < lext; res = (title [ltitle - 1 - k] == ext [lext - 1 - k]), k++){}
     return res;

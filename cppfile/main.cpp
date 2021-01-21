@@ -1,5 +1,5 @@
 #include <iostream>
-#include "build.h"
+#include "../include/build.h"
 
 using namespace std;
 
@@ -8,7 +8,6 @@ int main (){
         << " ou un nom de fichier audio (se terminant par une des extensions .wav et .wave)." << endl;
     char* title;
     cin >> title;
-    cout << title << endl;
     recognise (title);
     return 0;
 }

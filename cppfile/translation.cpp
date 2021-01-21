@@ -1,7 +1,7 @@
-#include "translation.h"
+#include "../include/translation.h"
 
 const char letterCast (const char& c){
-    if (64 < c < 91){ return c + 32; }
+    if (64 < c and c < 91){ return c + 32; }
     else{ return c; }
 }
 

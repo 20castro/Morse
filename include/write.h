@@ -1,9 +1,17 @@
 // Classe permettant d'écrire dans un fichier wave
 
+#ifndef TAU
+#define TAU
+
+static double tau = 6.283185307179586476925286766559;
+
+#endif
+
 #ifndef DEF_WRITE
 #define DEF_WRITE
 
-#include "wave.h"
+#include <iostream>
+#include <fstream>
 #include <cmath>
 
 static double amax = 32760; // amplitude maximale
@@ -11,10 +19,14 @@ static double amax = 32760; // amplitude maximale
 int sine (double, double, int);
 double freq (double, int);
 
-class Write : public Wavfile{
+class Write{
 
     public:
-        Write (const char*); // crée le fichier et remplit le header
+        Write (std::ofstream&); // crée le fichier et remplit le header
+        ~Write ();
+
+    private:
+        void addBytes (long int, int);
 
     public:
         void addShort ();
@@ -29,7 +41,7 @@ class Write : public Wavfile{
         void fixHeader (); // rentre la taille réelle du fichier dans le header
 
     private:
-        std::ofstream file;
+        std::ofstream& file;
         const int rate = 44100; // fréquence d'échantillonage en Hz
         const double unit = 0.8; // unité de temps en secondes
         const double fshort = 440; // fréquence des "ti" en Hz

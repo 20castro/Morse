@@ -4,9 +4,9 @@
 #include <iostream>
 #include <fstream>
 
-#include "write.h"
-#include "read.h"
-#include "translation.h"
+#include "../include/write.h"
+#include "../include/read.h"
+#include "../include/translation.h"
 
 void toMorse (const char*);
 
