@@ -42,9 +42,10 @@ int Read::pickBytes (int size){ // en little-endian
 
 std::vector <double> Read::fourierMax (double inf, double sup, double pas, bool stayThere = false){
     const int there = file.tellg ();
-    std::vector <double> maxi (2);
+    std::vector <double> maxi (3);
     maxi [0] = inf;
     maxi [1] = 0;
+    maxi [2] = 0; // 0 pour false et 1 pour true
     double height, sinlevel, coslevel, i;
     for (double f = inf; f <= sup; f += pas){
         sinlevel = 0;
@@ -61,17 +62,35 @@ std::vector <double> Read::fourierMax (double inf, double sup, double pas, bool 
             maxi [0] = f;
             maxi [1] = height;
         }
+        if (height > 2000){
+            maxi [2] = 1;
+            return maxi; // si on a déjà une valeur assez élevée, on s'arrête
+        }
     }
     if (stayThere){ file.seekg (there); }
     return maxi;
 }
 
 bool Read::harmonique (){
-    std::vector <double> range = fourierMax (40, 1200, 3, true);
+    int i, there = file.tellg ();
+    int step = 0;
+    for (; step < rate/10; step++){
+        i = 0;
+        for (int k = 0; k < channels; k++){ i += pickBytes (sample/8); }
+        if (abs (i) > 2000){ break; }
+    }
+    // Si on n'a trouvé aucune valeur significative, on renvoie directement false
+    // Sinon, on fait une analyse plus fine (transformation de Fourier)
+    if (step == rate/10){ return false; }
+    else{ file.seekg (there); }
     // premier passage imprécis
-    int level = fourierMax (range [0] - 3, range [0] + 3, 0.1, false) [1];
-    // deuxième passage plus étroit et précis
-    return level > 2000;
+    std::vector <double> range = fourierMax (40, 1200, 3, true);
+    if (range [2]){ return true; }
+    // deuxième passage plus étroit et précis si nécessaire
+    else{
+        int level = fourierMax (range [0] - 3, range [0] + 3, 0.1, false) [2];
+        return (bool) level;
+    }
 }
 
 std::vector <double> Read::fill (){
