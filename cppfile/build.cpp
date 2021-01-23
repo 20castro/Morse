@@ -22,7 +22,6 @@ void fromMorse (const char* title){
     double unit = max (sequence)/3; // longueur d'un point
     // dans la suite, ce qui nous intéresse sera alors uniquement le vecteur sequence (on peut supprimer r)
     // dans sequence, le son est aux indices pairs et les silences aux indices impairs
-    delete &r; // le fichier attribut de r est fermé par la destructeur
     const char* graphe = buildTree (); // représente un arbre
     int cur = 0;
     std::ofstream f ("transcription.txt"); // fichier qui va contenir la transcription
@@ -35,12 +34,11 @@ void fromMorse (const char* title){
         else if (sequence [k] > unit*0.5 and 2*cur < 63){
             cur = 2*cur + 1; // on se déplace vers le fils gauche
         }
-        if (k + 2 >= L){
+        if (k + 2 >= L and cur){
             f << graphe [cur];
         }
         else if (sequence [k + 1] > 1.5*unit){
             f << graphe [cur];
-            f << ' ';
             cur = 0;
         }
     }

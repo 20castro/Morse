@@ -32,6 +32,7 @@ class Read{
         bool harmonique ();
         // à l'aide de Fourier, détremine si l'intensité du son correspond à celle d'un bruit ou pas
         std::vector <double> fill ();
+        int avancement ();
 
     private:
         std::ifstream& file;

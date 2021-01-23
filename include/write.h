@@ -42,7 +42,7 @@ class Write{
     private:
         std::ofstream& file;
         const int rate = 44100; // fréquence d'échantillonage en Hz
-        const double unit = 0.7; // unité de temps en secondes
+        const double unit = 1; // unité de temps en secondes
         const double fshort = 440; // fréquence des "ti" en Hz
 };
 

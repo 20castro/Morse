@@ -7,8 +7,7 @@ const char letterCast (const char& c){
 
 std::map <char, int> buildMap (){
     std::map <char, int> dict;
-    //dict [32] = 0;
-    for (char c = 97; c < 123; c++){ dict[c] = 1; }
+    for (char c = 97; c < 123; c++){ dict [c] = 1; }
     for (char c = 48; c < 57; c++){ dict [c] = 1; }
     {
         std::string tiFifth ("98765");

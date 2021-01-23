@@ -63,14 +63,13 @@ std::vector <double> Read::fourierMax (double inf, double sup, double pas, bool 
         }
     }
     if (stayThere){ file.seekg (there); }
-    std::cout << "Position : " << file.tellg () << ' ' << maxi [0] << ' ' << maxi [1] << std::endl; // test
     return maxi;
 }
 
 bool Read::harmonique (){
-    std::vector <double> range = fourierMax (40, 2000, 1, true);
+    std::vector <double> range = fourierMax (40, 1200, 3, true);
     // premier passage imprécis
-    int level = fourierMax (range [0] - 1, range [0] + 1, 0.01, false) [1];
+    int level = fourierMax (range [0] - 3, range [0] + 3, 0.1, false) [1];
     // deuxième passage plus étroit et précis
     return level > 2000;
 }
@@ -79,7 +78,7 @@ std::vector <double> Read::fill (){
     int cnt = 0;
     double val = 0;
     bool state = false, newstate;
-    const int L = (10*longueur)/(channels*sample*rate);
+    const int L = (8*10*longueur)/(channels*sample*rate);
     std::vector <double> sequence;
     for (int step = 0; step < L; step++){
         newstate = harmonique ();
@@ -91,6 +90,9 @@ std::vector <double> Read::fill (){
             val = 0;
         }
         val += 0.1;
+        int out = system ("clear");
+        int pos = file.tellg ();
+        std::cout << "Traitement : " << 100*(pos - 44)/longueur << '%' << std::endl;
     }
     sequence.push_back (val);
     cnt++;

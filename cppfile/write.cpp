@@ -40,7 +40,7 @@ void Write::addShort (){
 
 void Write::addLong (){
     int q = file.tellp ();
-    int N = 2*unit*rate, n = 0;
+    int N = 3*unit*rate, n = 0;
     double r, t;
     for (; n < N; n++){
         r = (double) n / (double) N;
