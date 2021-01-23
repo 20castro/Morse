@@ -29,9 +29,14 @@ Read::~Read (){
 int Read::pickBytes (int size){ // en little-endian
     int res = 0;
     int pow = 1;
-    for (; size; size--, pow *= 256){
+    for (; size > 1; size--, pow *= 256){
         res += pow*file.get ();
     }
+    // Extraction du dernier octet un peu différente (porte le signe)
+    // Signe sur le premier bit du dernier octet
+    int extract = file.get ();
+    res += pow*(extract & 0x7F);
+    res -= (extract & 0x80) ? 128*pow : 0;
     return res;
 }
 
@@ -44,9 +49,10 @@ std::vector <double> Read::fourierMax (double inf, double sup, double pas, bool 
     for (double f = inf; f <= sup; f += pas){
         sinlevel = 0;
         coslevel = 0;
+        file.seekg (there);
         for (int step = 0; step < rate/10; step++){
             i = 0;
-            for (int k = 0; k < channels; k++){ i += pickBytes (sample); }
+            for (int k = 0; k < channels; k++){ i += pickBytes (sample/8); }
             sinlevel += 20*i*sin (tau*f*step/rate)/rate;
             coslevel += 20*i*cos (tau*f*step/rate)/rate;
         }
@@ -57,11 +63,12 @@ std::vector <double> Read::fourierMax (double inf, double sup, double pas, bool 
         }
     }
     if (stayThere){ file.seekg (there); }
+    std::cout << "Position : " << file.tellg () << ' ' << maxi [0] << ' ' << maxi [1] << std::endl; // test
     return maxi;
 }
 
 bool Read::harmonique (){
-    std::vector <double> range = fourierMax (20, 2000, 1, true);
+    std::vector <double> range = fourierMax (40, 2000, 1, true);
     // premier passage imprécis
     int level = fourierMax (range [0] - 1, range [0] + 1, 0.01, false) [1];
     // deuxième passage plus étroit et précis
