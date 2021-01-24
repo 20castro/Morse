@@ -1,0 +1,5 @@
+
+Le programme est compilé. Il vous permettra de coder un texte en morse (auquel cas il générera un fichier .wav) ou de traduire un fichier audio du morse vers le texte.
+
+Entrez ./main et laissez-vous guider !
+

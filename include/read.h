@@ -24,7 +24,7 @@ class Read{
         ~Read ();
 
     private:
-        int pickBytes (int);
+        int pickBytes (int, bool);
 
     public:
         std::vector <double> fourierMax (double, double, double, bool);
@@ -36,11 +36,11 @@ class Read{
 
     private:
         std::ifstream& file;
-        int extra; // quantité de données supplémentaires dans le header (par rapport à 44)
-        int channels;
-        int rate; // fréquence d'échantillonage en Hz
-        int sample; // nombre de bits par échantillon
-        int longueur; // taille du fichier
+        unsigned long int extra; // quantité de données supplémentaires dans le header (par rapport à 44)
+        unsigned int channels;
+        unsigned long int rate; // fréquence d'échantillonage en Hz
+        unsigned int sample; // nombre de bits par échantillon
+        unsigned long int longueur; // taille du fichier
 };
 
 #endif

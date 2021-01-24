@@ -2,7 +2,7 @@
 
 double max (std::vector <double> u){
     double maximum = u [0];
-    const int L = u.size ();
+    const unsigned int L = u.size ();
     for (double x : u){
         if (x > maximum){ maximum = x; }
     }
@@ -11,22 +11,22 @@ double max (std::vector <double> u){
 
 Read::Read (std::ifstream& file) : file (file){
     file.seekg (16);
-    extra = pickBytes (4) - 16;
+    extra = pickBytes (4, false) - 16;
     file.seekg (22);
-    channels = pickBytes (2);
+    channels = pickBytes (2, false);
     file.seekg (24);
-    rate = pickBytes (4);
+    rate = pickBytes (4, false);
     file.seekg (34);
-    sample = pickBytes (2);
+    sample = pickBytes (2, false);
     file.seekg (40 + extra);
-    longueur = pickBytes (4);
+    longueur = pickBytes (4, false);
 }
 
 Read::~Read (){
     file.close ();
 }
 
-int Read::pickBytes (int size){ // en little-endian
+int Read::pickBytes (int size, bool signed_int = true){ // en little-endian
     int res = 0;
     int pow = 1;
     for (; size > 1; size--, pow *= 256){
@@ -35,13 +35,16 @@ int Read::pickBytes (int size){ // en little-endian
     // Extraction du dernier octet un peu différente (porte le signe)
     // Signe sur le premier bit du dernier octet
     int extract = file.get ();
-    res += pow*(extract & 0x7F);
-    res -= (extract & 0x80) ? 128*pow : 0;
+    if (signed_int){
+        res += pow*(extract & 0x7F);
+        res -= (extract & 0x80) ? 128*pow : 0;
+    }
+    else{ res += pow*extract; }
     return res;
 }
 
 std::vector <double> Read::fourierMax (double inf, double sup, double pas, bool stayThere = false){
-    const int there = file.tellg ();
+    const unsigned long int there = file.tellg ();
     std::vector <double> maxi (3);
     maxi [0] = inf;
     maxi [1] = 0;
@@ -72,8 +75,9 @@ std::vector <double> Read::fourierMax (double inf, double sup, double pas, bool 
 }
 
 bool Read::harmonique (){
-    int i, there = file.tellg ();
-    int step = 0;
+    int i;
+    unsigned long int there = file.tellg ();
+    unsigned int step = 0;
     for (; step < rate/10; step++){
         i = 0;
         for (int k = 0; k < channels; k++){ i += pickBytes (sample/8); }
@@ -99,6 +103,7 @@ std::vector <double> Read::fill (){
     bool state = false, newstate;
     const int L = (8*10*longueur)/(channels*sample*rate);
     std::vector <double> sequence;
+    unsigned long int pos;
     for (int step = 0; step < L; step++){
         newstate = harmonique ();
         if (state xor newstate){
@@ -110,7 +115,7 @@ std::vector <double> Read::fill (){
         }
         val += 0.1;
         int out = system ("clear");
-        int pos = file.tellg ();
+        pos = file.tellg ();
         std::cout << "Traitement : " << 100*(pos - 44)/longueur << '%' << std::endl;
     }
     sequence.push_back (val);

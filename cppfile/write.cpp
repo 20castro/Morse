@@ -39,7 +39,6 @@ void Write::addShort (){
 }
 
 void Write::addLong (){
-    int q = file.tellp ();
     int N = 3*unit*rate, n = 0;
     double r, t;
     for (; n < N; n++){
@@ -58,17 +57,18 @@ void Write::longSilence (){
     for (int N = 3*unit*rate; N; N--){ addBytes (0, 4); } // 0 sur les deux chaînes
 }
 
-void Write::addLetter (int c){ // si c'est possible, l'argument est c = dict[lettre] sinon on n'appelle pas
+void Write::addLetter (int c, bool silence_ended = true){
+    // si c'est possible, l'argument est c = dict[lettre] sinon on n'appelle pas
     for (; c >> 1; c >>= 1){
         c & 0x01 ? addLong () : addShort ();
         shortSilence ();
     }
-    longSilence ();
+    if (silence_ended){ longSilence (); }
 }
 
 void Write::fixHeader (){
     file.seekp (0, file.end);
-    int len = file.tellp ();
+    unsigned long int len = file.tellp ();
     file.seekp (4);
     addBytes (len - 8, 4);
     file.seekp (40);

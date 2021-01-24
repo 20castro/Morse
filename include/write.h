@@ -34,7 +34,7 @@ class Write{
         void longSilence ();
 
     public:
-        void addLetter (int); // destiné à recevoir les entiers du dictionnaire de translation
+        void addLetter (int, bool); // destiné à recevoir les entiers du dictionnaire de translation
 
     public:
         void fixHeader (); // rentre la taille réelle du fichier dans le header
